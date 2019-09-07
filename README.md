@@ -1,4 +1,7 @@
 # AI_Hackathon_Server_Code
+Hosted: 
+http://ai-hackathon-aih19t-0081.surge.sh
+
 TechStack:
 <ol>
 <li> Django BackEnd</li>

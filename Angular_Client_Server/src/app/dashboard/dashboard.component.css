@@ -1,0 +1,8 @@
+.icon-img{
+	height: 60px;
+}
+.scroll {
+	height: 350px;
+    max-height: 350px;
+    overflow-y: auto;
+}

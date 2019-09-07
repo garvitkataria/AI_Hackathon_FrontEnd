@@ -1,0 +1,94 @@
+
+
+<div class="main-content" id="c1">
+  <div class="container-fluid" >
+
+      <div class="card card-plain">
+        <div class="card-header card-header-danger ">
+                <h4 class="card-title">Farm-{{farm_id}}</h4>
+        </div>
+      </div>
+
+      <h4>DJI_0015.JPG</h4>
+      <div class ="row">
+         <div class="form-group col-md-6">
+        <a target="_blank" href="http://localhost:8000/media/CropImgAnnotated/DJI_0015.JPG">
+        <img src="http://localhost:8000/media/CropImg/DJI_0015.JPG" class="img-fluid" alt="Responsive image">
+        </a>
+      </div>
+       <div class="form-group col-md-6">
+        <a target="_blank" href="http://localhost:8000/media/CropImgAnnotated/DJI_0015_result.JPG">
+          <img src="http://localhost:8000/media/CropImgAnnotated/DJI_0015_result.JPG" class="img-fluid" alt="Responsive image">
+        </a>
+      </div>
+      </div>
+
+
+      <div class="row">
+
+          <div class="form-group col-md-4">
+            <label for="inputState">Filter Date</label>
+            <select id="inputState" class="form-control">
+              <option selected>Today</option>
+              <option>Last Week</option>
+              <option>Last Month</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="inputState">Filter Image Status</label>
+            <select id="inputState" class="form-control">
+              <option selected>All</option>
+              <option>Need Attention(< 3000)</option>
+              <option>Serious Situation(< 1500)</option>
+            </select>
+          </div>
+      </div>
+        <div class="row" >
+            <div class="col-md-4" *ngFor="let crop of crops; ">
+                <div class="card card-chart " >
+                      <img class ="profile-img" src="http://localhost:8000{{crop.cropImageAnnotated}}" height="230"  />
+                    <div class="card-body" >
+
+                        
+                         <button mat-raised-button class="btn btn-outline-success" (mouseenter)="showNotification('top','right')"><h4 class="card-title">{{crop.cropImageAnnotated.split('/')[3]}}</h4></button>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">access_time</i>  
+                            <b>{{crop.created_on.split('T')[1].split(':')[0]}}:{{crop.created_on.split('T')[1].split(':')[1]}}</b>
+                            &nbsp;&nbsp; <b>{{crop.created_on.split('T')[0]}}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </div>
+      <div class="row">
+
+         <div class="col-lg-4 col-md-6 col-sm-6" *ngFor="let sensor of sensors" >
+                <div class="card card-stats" >
+                    <div class="card-header {{sensor.color}} card-header-icon">
+                        <div class="card-icon">
+                            <!-- <i class="material-icons">content_copy</i> -->
+                            <img src="{{sensor.icon}}" class="icon-img" style="height: 80px;">
+                        </div>
+                        <p class="card-category" >{{sensor.sensor_type}}</p>
+                        <h3 class="card-title">{{sensor.current_data}}
+                            <small></small>
+                        </h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                             <i class="material-icons">update</i> Just Updated
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+     
+      
+</div>

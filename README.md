@@ -38,7 +38,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 4. Start the virtual environment and Go to the project directory
           
           source bin/activate
-          cd IOT_Smart_Agriculture-master
+          cd AI_Hackathon_Server_Code-master/Django_Backend
           
           
 5. Run Django Server

@@ -5,6 +5,9 @@ from Farm.models import Farm
 from Farm.serializers import FarmSerializer
 from .models import Crop
 from .serializers import CropSerializer
+import requests
+import base64
+from django.core.files.base import ContentFile
 # from rest_framework.permissions import AllowAny
 
 class CropView(APIView):
@@ -33,9 +36,21 @@ class CropView(APIView):
 		try:
 			crop = Crop()
 			crop.farm = Farm.objects.get(id=request.data.get('farm_id'))
-			farmImage = request.data.get('farmImage')
-			print(farmImage)
-			crop.farmImage.save("1.jpg",request.data.get('farmImage'), save=True)
+			cropImage = request.data.get('cropImage')
+			print(cropImage)
+
+			r = requests.post("http://127.0.0.1:5000/", files={"cropImage": cropImage.read()})
+			crop.cropImage.save("1.jpg",cropImage, save=True)
+
+			data = r.json()
+			print(data['data']['cropImageAnnotated'])
+			crop.cropImageAnnotated.save("2.jpg", ContentFile(base64.b64decode(data['data']['cropImageAnnotated'])),save=True)
+			# data['data']['altitude']
+			crop.latitude = data['data']['latitude']
+			crop.longitude = data['data']['longitude']
+			crop.total_crops = data['data']['total_crops']
+			crop.altitude = data['data']['altitude']
+			# data['data']['total_crops']
 			crop.save()
 			# crop.longitude = request.data.get('longitude')
 			# crop.latitude = request.data.get('latitude')

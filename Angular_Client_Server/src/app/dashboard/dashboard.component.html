@@ -22,14 +22,14 @@
       <div class ="row">
          <div class="form-group col-md-6" >
           <h4 >Original Image</h4>
-        <a target="_blank" href="http://localhost:8000{{crop_show.cropImage}}">
-        <img src="http://localhost:8000{{crop_show.cropImage}}" class="img-fluid" alt="Responsive image">
+        <a target="_blank" href="{{server}}{{crop_show.cropImage}}">
+        <img src="{{server}}{{crop_show.cropImage}}" class="img-fluid" alt="Responsive image">
         </a>
       </div>
          <div class="form-group col-md-6">
           <h4>Annotated Image </h4>
-          <a target="_blank" href="http://localhost:8000{{this.crop_show.cropImageAnnotated}}">
-            <img src="http://localhost:8000{{this.crop_show.cropImageAnnotated}}" class="img-fluid" alt="Responsive image">
+          <a target="_blank" href="{{server}}{{crop_show.cropImageAnnotated}}">
+            <img src="{{server}}{{crop_show.cropImageAnnotated}}" class="img-fluid" alt="Responsive image">
           </a>
         </div>
       </div>
@@ -39,37 +39,56 @@
 
           <div class="form-group col-md-4">
             <label for="inputState">Filter Date</label>
-            <select id="inputState" class="form-control">
-              <option selected>Today</option>
-              <option>Last Week</option>
-              <option>Last Month</option>
+            <select id="inputState" class="form-control" #d (change)="filterDate(d.value)">
+              <option selected value='till_now'>Till Now</option>
+              <option value='today'>Today</option>
+              <option value='this_week'>This Week</option>
+              <option value='this_month'>This Month</option>
+              <option value='this_year'>This Year</option>
             </select>
           </div>
 
           <div class="form-group col-md-4">
             <label for="inputState">Filter Image Status</label>
-            <select id="inputState" class="form-control">
-              <option selected>All</option>
-              <option>Need Attention(< 3000)</option>
-              <option>Serious Situation(< 1500)</option>
+            <select id="inputState" class="form-control" #v (change)="filterImage(v.value)">
+              <option selected value='1'>All</option>
+              <option value='2'>Need Attention(< 3000)</option>
+              <option value='3'>Serious Situation(< 1500)</option>
             </select>
           </div>
       </div>
         <div class="row" >
             <div class="col-md-4" *ngFor="let crop of crops; ">
                 <div class="card card-chart " (click)="showCropImage(crop)">
-                      <img class ="profile-img" src="http://localhost:8000{{crop.cropImageAnnotated}}" height="230"  />
+                      <img class ="profile-img" src="{{server}}{{crop.cropImageAnnotated}}" height="230"  />
                     <div class="card-body" >
+                        <!--  <button mat-raised-button class="btn btn-outline-success" (mouseenter)="showNotification('top','right')"><h4 class="card-title">{{crop.cropImageAnnotated.split('/')[3]}}</h4></button> -->
+                         <h4 class="card-title">{{crop.cropImageAnnotated.split('/')[3]}} &nbsp;&nbsp;&nbsp;<button mat-raised-button class="btn btn-outline-success btn-sm" (click)="viewMap(crop)" >View In Map</button></h4>
+                         <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <td scope="col">Total Crops</td>
+                                <td scope="col">Altitude</td>
+                                <td scope="col">Coordinates</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td scope="row">{{crop.total_crops}}</td>
+                                <td>{{crop.altitude}}</td>
+                                <td>{{crop.latitude}},{{crop.longitude}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
 
-                        
-                         <button mat-raised-button class="btn btn-outline-success" (mouseenter)="showNotification('top','right')"><h4 class="card-title">{{crop.cropImageAnnotated.split('/')[3]}}</h4></button>
                     </div>
 
                     <div class="card-footer">
                         <div class="stats">
                             <i class="material-icons">access_time</i>  
+                            <b>{{crop.created_on.split('T')[0]}}</b>&nbsp;&nbsp;
                             <b>{{crop.created_on.split('T')[1].split(':')[0]}}:{{crop.created_on.split('T')[1].split(':')[1]}}</b>
-                            &nbsp;&nbsp; <b>{{crop.created_on.split('T')[0]}}</b>
+                             
                         </div>
                     </div>
                 </div>
@@ -160,7 +179,7 @@
                             <div class="ct-chart" id="dailySalesChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Average Crop Density vs Image</h4>
+                            <h4 class="card-title">Average Crop Density per Image</h4>
                             <p class="card-category">
                                 <span class="text-success"><i class="fa fa-long-arrow-up"></i> 4.50% </span> increase in Farm-1.</p>
                         </div>
@@ -178,7 +197,7 @@
                             <div class="ct-chart" id="websiteViewsChart" ></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Average Crop Density vs Month</h4>
+                            <h4 class="card-title">Average Crop Density per Month</h4>
                             <p class="card-category">
                                 <span class="text-success"><i class="fa fa-long-arrow-up"></i> 20% </span> increase in crop density.</p>
                            <!--  <p class="card-category">
@@ -188,10 +207,31 @@
                             <div class="stats">
                                 <i class="material-icons">access_time</i> data updated 3 days ago
                             </div>
+
                         </div>
                     </div>
                 </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                            <div class="row">
+                                                <img class ="profile-img" src="{{server}}/media/HeatMap/Farm-1" width="100%" style="margin: auto" />
+                                            </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                            <div class="row">
+                                                <img class ="profile-img" src="{{server}}/media/ScatterPlot/scatterplot_Rt4IvlJ" width="100%" />
+                                            </div>
+                                    </div>
+                                </div> 
+                            </div>
+
       </div>
+
       <hr><br>
 
 
@@ -202,7 +242,8 @@
 
               <div >
                   <ul *ngFor="let file of files ;" >
-                      <li *ngIf="file"> {{file.webkitRelativePath}}</li>
+                      <li *ngIf="file && !file_status" style="color:red"> {{file.webkitRelativePath}}</li>
+                      <li *ngIf="file && file_status" style="color:green">{{file.webkitRelativePath}}</li>
                   </ul>
               </div>
       </div>

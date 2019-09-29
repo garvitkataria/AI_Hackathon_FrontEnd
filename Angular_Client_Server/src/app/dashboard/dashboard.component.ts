@@ -17,10 +17,14 @@ export interface Foo {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  server = "http://127.0.0.1:8000"
   flag_crop_images=0;
   farm_id:string;
   crop_id:string;
   crops:crop[];
+
+  filter_crops:crop[];
+
   crop_show:crop;
   sensors:sensor[];
   weatherApiData:weatherApiData[];
@@ -37,6 +41,7 @@ export class DashboardComponent implements OnInit {
   ];
 
   files:any[];
+  file_status=0;
   constructor(private dataService:DataService, private router:Router, private activatedRouter:ActivatedRoute, private _mqttService: MqttService ) 
   {
     console.log("starting dataService...")
@@ -53,9 +58,17 @@ export class DashboardComponent implements OnInit {
      this.dataService.getCrops(this.farm_id).subscribe((crops)=>{
         console.log("Crops",crops);
         this.crops=crops
+        this.filter_crops = crops
         if(this.crops.length>=1)
           this.crop_show = this.crops[0]
      });
+   }
+   viewMap(crop)
+   {
+       console.log("view Map",crop)
+       localStorage.setItem('ImgInMap',   JSON.stringify(crop));
+       this.router.navigate(['/maps'])
+
    }
    showCropImage(crop)
    {
@@ -76,7 +89,7 @@ showNotification(from, align){
 
       },{
           type: type[color],
-          timer: 4000,
+          timer: 500,
           placement: {
               from: from,
               align: align
@@ -297,25 +310,138 @@ showNotification(from, align){
    filesPicked(files) 
    {  
         this.files =files
-        console.log("Files:")
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const path = file.webkitRelativePath.split('/');
-            console.log(file);
-            const formData = new FormData();
-            formData.append('farm_id', '1');
-            formData.append('farmImage', file);
-            this.dataService.postCropImg(formData).subscribe((data)=>{
-                console.log(data);
-              });
-        // upload file using path
-        }
-     }
+        
+   }
+   upload()
+   {
+      for (let i = 0; i < this.files.length; i++) {
+          const file = this.files[i];
+          const path = file.webkitRelativePath.split('/');
+          console.log(file);
+          const formData = new FormData();
+          formData.append('farm_id', this.farm_id);
+          formData.append('cropImage', file);
+          this.dataService.postCropImg(formData).subscribe(
+            (data)=>{
+              console.log(data);
+              this.file_status=1;
+            },
+            (err)=>{
+              this.file_status=0;
+            }
+            );
+      }
+   }
   goToCropImage()
   {
     console.log("farm_id",this.farm_id)
     this.router.navigate(['/typography',this.farm_id])
 
+  }
+  filterDate(d)
+  {
+    this.crops = this.filter_crops
+    console.log("filterDate",d);
+    const date_now = new Date()
+    const day_now = date_now.getDate()
+    const month_now = date_now.getMonth()
+    const year_now = date_now.getFullYear()
+    console.log(day_now,month_now,year_now)
+    if(d=="till_now")
+    {
+      this.crops =this.filter_crops
+    }
+    else if(d=="today")
+    {
+      this.crops = []
+      for (var i = 0; i < this.filter_crops.length; ++i) 
+      {
+        const dt = new Date(this.filter_crops[i].created_on);
+        const dt_day = dt.getDate()
+        const dt_month = dt.getMonth()
+        const dt_year = dt.getFullYear()
+        if((year_now==dt_year)&&(month_now==dt_month)&&(day_now==dt_day))
+          this.crops.push(this.filter_crops[i])
+        console.log(dt_day,dt_month,dt_year)
+      }
+      console.log(this.crops)
+    }
+    else if(d=="this_week")
+    {
+        this.crops = []
+        for (var i = 0; i < this.filter_crops.length; ++i) 
+        {
+            const dt = new Date(this.filter_crops[i].created_on);
+            const dt_day = dt.getDate()
+            const dt_month = dt.getMonth()
+            const dt_year = dt.getFullYear()
+            if( (year_now==dt_year) && (month_now==dt_month) && (day_now-dt_day<7) )
+              this.crops.push(this.filter_crops[i])
+            console.log(dt_day,dt_month,dt_year)
+        }
+        console.log(this.crops)
+    }
+    else if(d=="this_month")
+    {
+      this.crops = []
+        for (var i = 0; i < this.filter_crops.length; ++i) 
+        {
+            const dt = new Date(this.filter_crops[i].created_on);
+            const dt_day = dt.getDate()
+            const dt_month = dt.getMonth()
+            const dt_year = dt.getFullYear()
+            if((year_now==dt_year)&&(month_now==dt_month))
+              this.crops.push(this.filter_crops[i])
+            console.log(dt_day,dt_month,dt_year)
+        }
+        console.log(this.crops)
+    }
+    else if(d=="this_year")
+    {
+      this.crops = []
+        for (var i = 0; i < this.filter_crops.length; ++i) 
+        {
+            const dt = new Date(this.filter_crops[i].created_on);
+            const dt_day = dt.getDate()
+            const dt_month = dt.getMonth()
+            const dt_year = dt.getFullYear()
+            if((year_now==dt_year))
+              this.crops.push(this.filter_crops[i])
+            console.log(dt_day,dt_month,dt_year)
+        }
+        console.log(this.crops)
+    }
+  }
+  filterImage(x)
+  {
+      this.crops =this.filter_crops
+      if(x==1)
+      {
+        console.log("Testing...",x)
+        this.crops =this.filter_crops
+      }
+      else if(x==2)
+      {
+          console.log("Testing...",x)
+          this.crops = []
+          for (var i = 0; i < this.filter_crops.length; ++i) 
+          {
+            console.log(this.filter_crops[i].total_crops)
+            if(this.filter_crops[i].total_crops < 3000)
+              this.crops.push(this.filter_crops[i])
+          }
+      }
+      else if(x==3)
+      {
+          console.log("Testing...",x)
+          this.crops = []
+          for (var i = 0; i < this.filter_crops.length; ++i) 
+          {
+            console.log(this.filter_crops[i].total_crops)
+            if(this.filter_crops[i].total_crops < 1500)
+              this.crops.push(this.filter_crops[i])
+          }
+      }
   }
 }
 interface crop
@@ -326,7 +452,9 @@ interface crop
         "latitude": string,
         "created_on": string,
         "cropImageAnnotated": string,
-        "cropImage": string
+        "cropImage": string,
+        "total_crops":number,
+        "altitude":number,
   }
  interface sensor
  {

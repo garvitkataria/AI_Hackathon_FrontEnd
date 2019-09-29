@@ -14,8 +14,13 @@ draggable?: boolean;
   styleUrls: ['./maps.component.css']
 })
 export class MapsComponent implements OnInit {
-
-  constructor(private dataService:DataService) { }
+  crop:any;
+  server = "http://127.0.0.1:8000"
+  constructor(private dataService:DataService) 
+  { 
+    this.crop = JSON.parse(localStorage.getItem("ImgInMap"));
+    console.log("In Map",this.crop)
+  }
 
   ngOnInit() {
 

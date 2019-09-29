@@ -18,6 +18,8 @@ class CropSerializer(ModelSerializer):
 			'cropImageAnnotated',
 			'longitude',
 			'latitude',
+			'altitude',
+			'total_crops',
 			'created_on'
 			]
 	read_only_fields = ['id', 'created_on']

@@ -2,7 +2,7 @@
 <router-outlet>
 	
 </router-outlet>
-<!-- lat{{lat}}
+lat{{lat}}
 long{{lng}}
 <agm-map
   [latitude]="lat"
@@ -19,7 +19,8 @@ long{{lng}}
       [longitude]="m.lng"
       [label]="m.label"
       [markerDraggable]="m.draggable"
-      (dragEnd)="markerDragEnd(m, $event)">
+      (dragEnd)="markerDragEnd(m, $event)"
+      >
       
     <agm-info-window>
       <strong>InfoWindow content</strong>
@@ -27,11 +28,11 @@ long{{lng}}
     
   </agm-marker>
   
-  <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-      [radius]="5000"
+  <agm-circle [latitude]="lat-0.0010" [longitude]="lng-0.0017" 
+      [radius]="300"
       [fillColor]="'red'"
       [circleDraggable]="true"
       [editable]="true">
   </agm-circle>
 
-</agm-map> -->
+</agm-map>

@@ -27,6 +27,8 @@ class Crop(models.Model):
     crop_type = models.CharField(max_length=20, choices=CROP_TYPES, default='Pulses')
     longitude = models.FloatField(default=0.00)
     latitude = models.FloatField(default=0.00)
+    altitude = models.FloatField(default=0.00)
+    total_crops = models.FloatField(default=0.00)
     created_on = models.DateTimeField(auto_now_add=True)
     cropImage = models.ImageField(upload_to=image_upload_path, default='farm.jpg')
     cropImageAnnotated = models.ImageField(upload_to=image_upload_path_2, default='farm.jpg')

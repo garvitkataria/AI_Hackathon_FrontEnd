@@ -11,6 +11,7 @@ export class DataService {
 		"latitude":'1',
 		"longitude":'1'
 	}
+	// server = "http://35.200.250.64:8002";
 	server = "http://127.0.0.1:8000";
   	constructor(public http:Http) { }
 

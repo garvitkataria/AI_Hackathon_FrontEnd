@@ -56,7 +56,7 @@
                             <div class="ct-chart" id="dailySalesChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Average Crop Density vs Farm</h4>
+                            <h4 class="card-title">Average Crop Density per Farm</h4>
                             <p class="card-category">
                                 <span class="text-success"><i class="fa fa-long-arrow-up"></i> 12.82% </span> increase in Farm-1.</p>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="ct-chart" id="websiteViewsChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Average Crop Density vs Month</h4>
+                            <h4 class="card-title">Average Crop Density per Month</h4>
                             <p class="card-category">
                                 <span class="text-success"><i class="fa fa-long-arrow-up"></i> 30% </span> increase in crop density.</p>
                            <!--  <p class="card-category">
@@ -95,22 +95,25 @@
           </div>
           <div class="row" >
             <!-- <a routerLink="/dashboard">lol</a> -->
-            <div class="col-md-4" *ngFor="let farm of farms; let img = 'http://127.0.0.1:8000'" >
+            <div class="col-md-4" *ngFor="let farm of farms;" >
                <!-- <a routerLink="/dashboard"> -->
                 <div class="card card-chart" (click)="goToCrops(farm.id)" >
                     <div >
                         <!-- <div class="ct-chart" id="websiteViewsChart"></div> -->
-                        <img class ="profile-img" src="http://127.0.0.1:8000{{farm.farmImage}}"/>
+                        <img class ="profile-img" src="{{server}}{{farm.farmImage}}"/>
                     </div>
                     <div class="card-body" >
-                        <h4 class="card-title">{{farm.farm_name}}</h4>
-                        <p class="card-category">{{farm.about}}</p>
+                        <h3 class="card-title">{{farm.farm_name}}</h3>
+                    <!--     <p class="card-category">{{farm.about}}</p>
                         <p class="card-category">longitude: {{farm.longitude}}</p>
-                        <p class="card-category">latitude: {{farm.latitude}}</p>
+                        <p class="card-category">latitude: {{farm.latitude}}</p> -->
                     </div>
                     <div class="card-footer">
                         <div class="stats">
-                            <i class="material-icons">access_time</i> {{farm.created_on}}
+                            <i class="material-icons">access_time</i> 
+                            
+                            <b>{{farm.created_on.split('T')[0]}}</b>&nbsp;&nbsp;
+                            <b>{{farm.created_on.split('T')[1].split(':')[0]}}:{{farm.created_on.split('T')[1].split(':')[1]}}</b>
                         </div>
                     </div>
                 </div>

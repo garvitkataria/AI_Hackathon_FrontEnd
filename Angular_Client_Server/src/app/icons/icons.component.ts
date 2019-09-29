@@ -8,7 +8,8 @@ import * as Chartist from 'chartist';
   styleUrls: ['./icons.component.css']
 })
 export class IconsComponent implements OnInit {
-	farms:farm[];
+	server = "http://127.0.0.1:8000"
+  farms:farm[];
   userP:userProfile;
 	img:string
 
@@ -27,8 +28,8 @@ export class IconsComponent implements OnInit {
      this.dataService.getFarm().subscribe((farms)=>{
         console.log(farms);
         this.farms=farms
-        console.log("http://127.0.0.1:8000"+farms[2].farmImage);
-        this.img="http://127.0.0.1:8000"+farms[2].farmImage
+        console.log("{{server}}"+farms[2].farmImage);
+        this.img="{{server}}"+farms[2].farmImage
         // this.userP=farms
      });
 

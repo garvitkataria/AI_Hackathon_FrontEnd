@@ -30,7 +30,7 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
   userP:userProfile;
-
+  server="http://127.0.0.1:8000"
 
   constructor(private dataService:DataService) 
   { 
